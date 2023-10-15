@@ -14,7 +14,7 @@ POSTGRES_HOST = 'localhost'
 POSTGRES_PORT = 5435
 
 if os.path.exists('/proc/1'):
-    POSTGRES_HOST = os.getenv(POSTGRES_HOST)
+    POSTGRES_HOST = os.getenv('POSTGRES_HOST')
     POSTGRES_PORT = 5432
 
 

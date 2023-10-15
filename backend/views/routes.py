@@ -4,11 +4,11 @@ from fastapi import APIRouter, Depends, Query
 
 from asyncpg.connection import Connection
 
-from backend.dependencies.db import get_db
+from dependencies.db import get_db
 
-from backend.schemas import Branch, BranchScore
+from schemas import Branch, BranchScore
 
-from backend.controllers.routes_controller import RoutesController
+from controllers.routes_controller import RoutesController
 
 routes = APIRouter(
     prefix='/api/routes',

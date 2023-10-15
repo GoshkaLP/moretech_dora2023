@@ -6,7 +6,6 @@ services:
     ports:
       - "2181:2181"
 
-
   kafka:
     image: wurstmeister/kafka
     restart: unless-stopped
@@ -22,7 +21,8 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_MESSAGE_MAX_BYTES=2000000
       - KAFKA_CREATE_TOPICS="events:1:1"
-
+    depends_on:
+      - zookeeper
 
   postgres:
     image: postgis/postgis:16-3.4
@@ -34,25 +34,29 @@ services:
     ports:
       - "5435:5432"
 
-
   jobmanager:
-    build: .
+    build:
+      context: ./events
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     command: jobmanager
     volumes:
-      - "./flink_pipeline.py:/opt/flink/flink_pipeline.py"
-      - "./.env:/opt/flink/.env"
+      - "./events/flink_pipeline.py:/opt/flink/flink_pipeline.py"
+      - "./events/.env:/opt/flink/.env"
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
+    depends_on:
+      - kafka
+      - postgres
 
 
   taskmanager:
-    build: .
-    depends_on:
-      - jobmanager
+    build:
+      context: ./events
+      dockerfile: Dockerfile
     command: taskmanager
     scale: 1
     environment:
@@ -60,3 +64,19 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
+    depends_on:
+      - jobmanager
+      - kafka
+      - postgres
+
+  moretech_app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
