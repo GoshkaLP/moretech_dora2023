@@ -3,11 +3,7 @@
 Трек 1 - MOBILE + WEB - Сервис подбора оптимального отделения банка, учитывая
 потребности клиента и доступность услуг  
 
-[//]: # (![Main screen]&#40;./imgs/main.png&#41;)
-<div style="text-align:center">
 <img src="./imgs/main.png" width="30%">
-</div>
-
 
 ### Описание решения
 Был разработан сервис backend + frontend.  
