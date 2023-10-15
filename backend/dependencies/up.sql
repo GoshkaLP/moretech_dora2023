@@ -9,13 +9,16 @@ CREATE TABLE agg_events (
     total_load INT
 );
 
-create table branches (
+DROP TABLE branches;
+
+CREATE TABLE branches (
     id SERIAL PRIMARY KEY,
     name VARCHAR,
     address VARCHAR,
-    latitude VARCHAR,
-    longitude VARCHAR
+    geometry POINT
 );
+
+DROP TABLE services;
 
 create table services (
     id SERIAL PRIMARY KEY,
@@ -23,8 +26,10 @@ create table services (
     juridical BOOLEAN
 );
 
+DROP TABLE branches_services;
+
 CREATE TABLE branches_services (
     id SERIAL PRIMARY KEY,
-    branch_id INT REFERENCES branches(id),
-    service_id INT REFERENCES services(id)
+    branch_id INT,
+    service_id INT
 );

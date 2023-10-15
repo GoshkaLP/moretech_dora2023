@@ -9,7 +9,15 @@ class Branch(BaseModel):
     longitude: float
 
 
+class BranchScore(Branch):
+    score: float
+
+
 class Service(BaseModel):
     id: int
     name: str
     service_type: str
+
+
+class ServiceLoad(Service):
+    load: float

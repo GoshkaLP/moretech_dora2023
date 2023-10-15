@@ -25,9 +25,9 @@ KAFKA_TOPIC = os.getenv('KAFKA_TOPIC')
 # Настройка источника данных из Kafka
 source_ddl = f"""
     CREATE TABLE events (
-        branch_id STRING,
+        branch_id INT,
         status STRING,
-        service_id STRING,
+        service_id INT,
         event_time TIMESTAMP(3),
         WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
     ) WITH (
@@ -65,8 +65,8 @@ result = t_env.sql_query("""
 # Настройка слива данных в PostgreSQL
 sink_ddl = f"""
             CREATE TABLE postgres_sink (
-                `service_id` VARCHAR,
-                `branch_id` VARCHAR,
+                `service_id` INT,
+                `branch_id` INT,
                 `w_start` TIMESTAMP,
                 `w_end` TIMESTAMP,
                 `total_load` INT
