@@ -4,7 +4,9 @@ from asyncpg.connection import Connection
 class ServicesController:
     def __init__(self, db_conn: Connection):
         self.db_conn = db_conn
-        self.branch_services_query = '''
+
+    async def get_branch_services(self, branch_id: int):
+        rows = await self.db_conn.fetch(f'''
             WITH LatestLoads AS (
                 SELECT
                     branch_id,
@@ -27,11 +29,7 @@ class ServicesController:
             JOIN branches_services bs ON s.id = bs.service_id
             LEFT JOIN LatestLoads ll ON bs.service_id = ll.service_id AND bs.branch_id = ll.branch_id
             WHERE bs.branch_id = {branch_id};
-            '''
-
-    async def get_branch_services(self, branch_id: int):
-        query = self.branch_services_query.format(branch_id=branch_id)
-        rows = await self.db_conn.fetch(query)
+            ''')
         branch_services = [
             {
                 'id': row['service_id'],

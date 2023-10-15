@@ -13,6 +13,10 @@ class BranchScore(Branch):
     score: float
 
 
+class BranchLoad(Branch):
+    load: float
+
+
 class Service(BaseModel):
     id: int
     name: str

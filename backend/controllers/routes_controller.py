@@ -8,14 +8,11 @@ class RoutesController:
         WITH RecentLoads AS (
             SELECT
                 branch_id,
-                service_id,
                 AVG(total_load) AS avg_load_last_5min
             FROM
                 agg_events
             WHERE
                 w_end >= NOW() - INTERVAL '5 minutes'
-            AND
-                service_id IN {services_ids}
             GROUP BY
                 branch_id, service_id
         )
@@ -45,15 +42,39 @@ class RoutesController:
                 '''
 
     async def get_branches(self):
-        rows = await self.db_conn.fetch('''SELECT id, name, address, ST_X(geometry) AS longitude,
-                                        ST_Y(geometry) AS latitude FROM branches''')
+        rows = await self.db_conn.fetch('''
+        WITH RecentLoads AS (
+            SELECT
+                branch_id,
+                AVG(total_load) AS avg_load_last_5min
+            FROM
+                agg_events
+            WHERE
+                w_end >= NOW() - INTERVAL '5 minutes'
+            GROUP BY
+                branch_id
+        )
+        
+        SELECT 
+            b.id, 
+            b.name, 
+            b.address, 
+            ST_X(b.geometry) AS longitude,
+            ST_Y(b.geometry) AS latitude,
+            COALESCE(rl.avg_load_last_5min, 0) AS load
+        FROM 
+            branches b
+        LEFT JOIN 
+            RecentLoads rl ON b.id = rl.branch_id;
+            ''')
         branches = [
             {
                 'id': row['id'],
                 'name': row['name'],
                 'address': row['address'],
                 'latitude': row['latitude'],
-                'longitude': row['longitude']
+                'longitude': row['longitude'],
+                'load': row['load']
             }
             for row in rows
         ]
