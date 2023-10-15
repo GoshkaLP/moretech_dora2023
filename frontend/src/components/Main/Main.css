@@ -1,0 +1,24 @@
+.main {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.main__button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.main__map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.main-text {
+  margin: 0;
+  padding: 0;
+}

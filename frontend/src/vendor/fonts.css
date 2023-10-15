@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'VTB Group UI';
+  font-weight: 400;
+  src: url("fonts/VTBGroupUI-Regular.woff") format("woff"),
+  url("fonts/VTBGroupUI-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'VTB Group UI';
+  font-weight: 500;
+  src: url("fonts/VTBGroupUI-Medium.woff") format("woff"),
+  url("fonts/VTBGroupUI-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'VTB Group UI';
+  font-weight: 600;
+  src: url("fonts/VTBGroupUI-SemiBold.woff") format("woff"),
+  url("fonts/VTBGroupUI-SemiBold.woff2") format("woff2");
+}
